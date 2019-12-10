@@ -5,7 +5,7 @@ pipeline {
             steps {
               sh '''
                  cd ./config-server
-                 ./mvnw -DskipTests clean compile
+                    ./mvnw -DskipTests clean compile
               '''
             }
         }
@@ -14,7 +14,6 @@ pipeline {
               sh '''
                  cd config-server
                      ./mvnw test
-                 
               '''
             }
         }
