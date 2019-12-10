@@ -1,14 +1,17 @@
 pipeline {
     agent any
+
     stages {
+
         stage('build') {
             steps {
               sh '''
-                 cd config-server
-                    ./mvnw -DskipTests clean compile
+                 cd ./config-server
+                 ./mvnw -DskipTests clean compile
               '''
             }
         }
+
         stage('test') {
             steps {
               sh '''
@@ -17,14 +20,13 @@ pipeline {
               '''
             }
         }
+
         stage('deliver') {
             steps {
               sh '''
-                cd config-server
-                    ./mvnw -DskipTests install
-                
+                 cd config-server
+                     ./mvnw -DskipTests install
               '''
             }
         }
-    }
-}
+
