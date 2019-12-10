@@ -4,7 +4,7 @@ pipeline {
         stage('build') {
             steps {
               sh '''
-                 cd ./config-server
+                 cd config-server
                     ./mvnw -DskipTests clean compile
               '''
             }
