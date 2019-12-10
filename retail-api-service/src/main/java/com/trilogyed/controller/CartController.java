@@ -66,7 +66,7 @@ public class CartController {
     }
 
     @HystrixCommand(fallbackMethod = "getLevelUpPoints2")
-    @GetMapping(value = "/customer/points/{id}")
+    @GetMapping(value = "/levelUp/customer/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String getLevelUpPointsByCustomerId(@PathVariable Integer id) throws NoSuchCustomerError {
         LevelUp levelUp = cart.findLevelUpByCustomerId(id);

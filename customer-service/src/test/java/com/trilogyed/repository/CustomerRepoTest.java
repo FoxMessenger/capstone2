@@ -17,11 +17,6 @@ public class CustomerRepoTest {
     @Autowired
     CustomerRepo repo;
 
-    @Before
-    public void setUp() {
-        repo.deleteAll();
-    }
-
     @Test
     public void shouldGetCustomerByEmail() {
         Customer customer = new Customer("Ken", "Masters", "123 Main Street", "USA", "90009", "Ken@Master.info", "333-555-5551");

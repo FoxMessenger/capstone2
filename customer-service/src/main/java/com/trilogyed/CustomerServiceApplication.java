@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableEurekaClient
 @EnableFeignClients
-@EnableCaching
+//@EnableCaching
 public class CustomerServiceApplication {
 
     public static void main(String[] args) {

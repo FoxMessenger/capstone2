@@ -1,0 +1,14 @@
+-------------------------------------------------------------------------------
+Test set: com.trilogyed.controller.CartControllerTest
+-------------------------------------------------------------------------------
+Tests run: 8, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 6.693 s <<< FAILURE! - in com.trilogyed.controller.CartControllerTest
+shouldRetrieveLevelUpByCustomerId  Time elapsed: 0.067 s  <<< FAILURE!
+org.opentest4j.AssertionFailedError: 
+
+Expecting:
+ <404>
+to be equal to:
+ <200>
+but was not.
+	at com.trilogyed.controller.CartControllerTest.shouldRetrieveLevelUpByCustomerId(CartControllerTest.java:221)
+

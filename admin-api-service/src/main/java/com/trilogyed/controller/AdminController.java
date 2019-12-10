@@ -164,6 +164,7 @@ public class AdminController {
 
     @CacheEvict(value = "#invoice.getId()")
     @PutMapping(value = "/admin/invoice")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateInvoice(@RequestBody Invoice invoice){
         service.updateInvoice(invoice);
     }
@@ -205,6 +206,7 @@ public class AdminController {
 
     @CacheEvict(value = "#product.getId()")
     @PutMapping(value = "/admin/product")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateProduct(@RequestBody Product product){
         service.updateProduct(product);
     }

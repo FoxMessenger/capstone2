@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,8 +30,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -130,6 +130,8 @@ public class AdminControllerTest {
         Customer customer2 = new Customer();
         customer2.setId(1);
 
+        when(service.findCustomerById(1)).thenReturn(customer2);
+
         MockHttpServletResponse updateResponse = mockMvc.perform(
                 put("/admin/customer/{id}", 1).with(csrf())
                         .content(jsonCustomer.write(customer2).getJson())
@@ -147,6 +149,8 @@ public class AdminControllerTest {
         Customer customer1 = new Customer();
         Customer customerAdded = customer1;
         customerAdded.setId(1);
+
+        when(service.findCustomerById(1)).thenReturn(customerAdded);
 
         MockHttpServletResponse deleteResponse = mockMvc.perform(
                 delete("/admin/customer/{id}", 1).with(csrf())
@@ -228,8 +232,11 @@ public class AdminControllerTest {
         Product product2 = new Product();
         product2.setId(1);
 
+        when(service.findProductById(1)).thenReturn(product2);
+
+
         MockHttpServletResponse updateResponse = mockMvc.perform(
-                put("/admin/product")
+                put("/admin/product").with(csrf())
                         .content(jsonProduct.write(product2).getJson())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -245,9 +252,10 @@ public class AdminControllerTest {
         Product product1 = new Product();
         Product productAdded = product1;
         productAdded.setId(1);
+        when(service.findProductById(1)).thenReturn(productAdded);
 
         MockHttpServletResponse deleteResponse = mockMvc.perform(
-                delete("/admin/customer/{id}", 1)
+                delete("/admin/product/{id}", 1).with(csrf())
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
         assertThat(deleteResponse.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
@@ -318,10 +326,12 @@ public class AdminControllerTest {
         Invoice invoiceAdded = invoice1;
         invoiceAdded.setId(1);
 
+        when(service.findInvoiceById(1)).thenReturn(invoiceAdded);
+
         Invoice invoice2 = new Invoice();
         invoice2.setId(1);
         MockHttpServletResponse updateResponse = mockMvc.perform(
-                put("/admin/invoice")
+                put("/admin/invoice").with(csrf())
                         .content(jsonInvoice.write(invoice2).getJson())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -336,9 +346,10 @@ public class AdminControllerTest {
         Invoice invoice1 = new Invoice();
         Invoice invoiceAdded = invoice1;
         invoiceAdded.setId(1);
+        when(service.findInvoiceById(1)).thenReturn(invoiceAdded);
 
         MockHttpServletResponse deleteResponse = mockMvc.perform(
-                delete("/admin/customer/{id}", 1)
+                delete("/admin/invoice/{id}", 1).with(csrf())
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
         assertThat(deleteResponse.getStatus()).isEqualTo(HttpStatus.NO_CONTENT.value());
@@ -415,6 +426,7 @@ public class AdminControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void shouldForbidFromCreatingAndUpdatingLevelUp() throws Exception {
         LevelUp levelup1 = new LevelUp(1,150, LocalDate.of(2019, 5,5));
         LevelUp levelupUpdate = new LevelUp(1,150, LocalDate.of(2019, 5,5));
@@ -424,19 +436,21 @@ public class AdminControllerTest {
         given(service.createNewLevelUp(levelup1))
                 .willReturn(levelupAdded);
 
-        MockHttpServletResponse createResponse = mockMvc.perform(
-                post("/admin/levelup").with(csrf()).content(jsonLevelUp.write(levelup1).getJson())
+        MockHttpServletResponse forbCreateResponse = mockMvc.perform(
+                post("/admin/levelup")
+                        .content(jsonLevelUp.write(levelup1).getJson())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
-        assertThat(createResponse.getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+        assertThat(forbCreateResponse.getStatus()).isEqualTo(HttpStatus.FORBIDDEN.value());
 
         MockHttpServletResponse updateResponse = mockMvc.perform(
-                put("/admin/levelup").with(csrf()).content(jsonLevelUp.write(levelupUpdate).getJson())
+                put("/admin/levelUp")
+                        .content(jsonLevelUp.write(levelupUpdate).getJson())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
-        assertThat(updateResponse.getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+        assertThat(updateResponse.getStatus()).isEqualTo(HttpStatus.FORBIDDEN.value());
     }
 
     @Test

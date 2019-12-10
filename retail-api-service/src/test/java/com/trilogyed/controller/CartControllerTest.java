@@ -62,8 +62,6 @@ public class CartControllerTest {
 
     private JacksonTester<LevelUp> jsonLevelUp;
 
-    private JacksonTester<Integer> jsonLevelUpPoints;
-
     @Before
     public void setUp() throws Exception {
         JacksonTester.initFields(this, new ObjectMapper());
@@ -221,6 +219,6 @@ public class CartControllerTest {
                 .andReturn().getResponse();
 
         assertThat(id1Response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(id1Response.getContentAsString()).isEqualTo(jsonLevelUpPoints.write(150).getJson());
+        assertThat(id1Response.getContentAsString()).isEqualTo("You have earned 150 points");
     }
 }

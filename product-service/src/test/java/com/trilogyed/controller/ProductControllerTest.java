@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -67,8 +68,13 @@ public class ProductControllerTest {
     public void shouldRetrieveProductById() throws Exception {
         Product product1 = new Product();
         product1.setId(1);
+
+        given(repo.findById(1))
+                .willReturn(Optional.of(product1));
+
         given(repo.getOne(1))
                 .willReturn(product1);
+
         MockHttpServletResponse id1Response = mockMvc.perform(
                 get("/product/{id}", 1)
                         .accept(MediaType.APPLICATION_JSON))
